@@ -5,8 +5,8 @@ title: About me
 tags: [Jekyll, theme, modern, minimal, responsive]
 share: true
 ---
-
-They say three times the charm, so here is another free responsive Jekyll theme for you. I've learned a ton since open sourcing my first two themes [on Github](http://github.com/mmistakes), and wanted to try a few new things this time around. If you've used my previous themes most of this should be familiar territory...
+##nothing
+<!-- They say three times the charm, so here is another free responsive Jekyll theme for you. I've learned a ton since open sourcing my first two themes [on Github](http://github.com/mmistakes), and wanted to try a few new things this time around. If you've used my previous themes most of this should be familiar territory...
 
 ## What HPSTR brings to the table:
 
@@ -26,4 +26,4 @@ They say three times the charm, so here is another free responsive Jekyll theme 
 
 <div markdown="0"><a href="{{ site.url }}/theme-setup" class="btn btn-info">Install the Theme</a></div>
 
-[^1]: Example: *domain.com/category-name/post-title*
+[^1]: Example: *domain.com/category-name/post-title* -->
