@@ -4,7 +4,7 @@ disqus_shortname: er
 reading_time:     true
 words_per_minute: 200
 #Your site's domain goes here. Leave localhost server or blank when working locally.
-url:              http://localhost:4000
+url:              http://ranlei.github.io/
 
 # Owner/author information
 owner:
@@ -13,7 +13,7 @@ owner:
   bio:                i'm coder
   email:          ranleixxx@email.com
   # Social networking links used in footer. Update and remove as you like.
-  github: https://github.com/ranlei
+  github: ranlei
   # For Google Authorship https://plus.google.com/authorship
   # google plus id, include the '+', eg +mmistakes
 
