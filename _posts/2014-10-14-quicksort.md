@@ -25,7 +25,8 @@ tags: [algorithms]
 
 ###代码实现
 
-1.  ANSI C
+####   1. ANSI C
+
         {% highlight c %}
         #include<stdio.h>
         int* quicksort(int list[],int left,int right){
@@ -62,7 +63,9 @@ tags: [algorithms]
                  printf("%d,",result[i]);
          }
          {% endhighlight %}
-2.  Python
+
+####   2. Python
+
         {% highlight python %}
         def quicksort(lists,left,right):
         """Pivot point to start here""" 
