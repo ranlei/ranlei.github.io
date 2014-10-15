@@ -1,0 +1,282 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>python装饰器与ANSI C 的宏 &#8211; rale's Melon</title>
+<meta name="description" content="You'll be living-not watching life from a screen.">
+<meta name="keywords" content="python">
+
+
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python装饰器与ANSI C 的宏">
+<meta property="og:description" content="You'll be living-not watching life from a screen.">
+<meta property="og:url" content="http://ranlei.github.io/decorator/">
+<meta property="og:site_name" content="rale's Melon">
+
+
+
+
+
+<link rel="canonical" href="http://ranlei.github.io/decorator/">
+<!-- <link href="http://ranlei.github.io/feed.xml" type="application/atom+xml" rel="alternate" title="rale's Melon Feed">
+
+ -->
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://ranlei.github.io/assets/css/main.min.css">
+<!-- Webfonts -->
+<link href="http://ranlei.github.io/assets/css/font.css" rel="stylesheet" type="text/css">
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- Load Modernizr -->
+<script src="http://ranlei.github.io/assets/js/vendor/modernizr-2.6.2.custom.min.js"></script>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<!-- <link rel="shortcut icon" href="http://ranlei.github.io/favicon.ico"> -->
+<!-- 32x32 -->
+<!-- <link rel="shortcut icon" href="http://ranlei.github.io/favicon.png"> -->
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="http://ranlei.github.io/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://ranlei.github.io/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://ranlei.github.io/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://ranlei.github.io/images/apple-touch-icon-144x144-precomposed.png">
+
+
+
+</head>
+
+<body id="post" >
+
+<!--[if lt IE 9]><div class="upgrade"><strong><a href="http://whatbrowser.org/">Your browser is quite old!</strong> Why not upgrade to a different browser to better enjoy this site?</a></div><![endif]-->
+<nav id="dl-menu" class="dl-menuwrapper" role="navigation">
+	<button class="dl-trigger">Open Menu</button>
+	<ul class="dl-menu">
+		<li><a href="http://ranlei.github.io">Home</a></li>
+		<li>
+			<a href="#">Posts</a>
+			<ul class="dl-submenu">
+				<li><a href="http://ranlei.github.io/posts/">All Posts</a></li>
+				<li><a href="http://ranlei.github.io/tags/">All Tags</a></li>
+			</ul>
+		</li>
+		<li>
+			<a href="#">About</a>
+			<ul class="dl-submenu">
+				<li>
+					<img src="http://ranlei.github.io/images/avatar.jpg" alt="rale photo" class="author-photo">
+					<h4>rale</h4>
+					<p>You'll be living-not watching life from a screen.</p>
+				</li>
+				<li><a href="http://ranlei.github.io/about/">Learn More</a></li>
+				<li>
+					<a href="mailto:ranleixxx@email.com"><i class="fa fa-envelope"></i> Email</a>
+				</li>
+				
+				
+				
+				
+				<li>
+					<a href="http://github.com/ranlei"><i class="fa fa-github"></i> GitHub</a>
+				</li>
+				
+				
+				
+				
+			</ul><!-- /.dl-submenu -->
+		</li>
+	
+		
+	</ul><!-- /.dl-menu -->
+</nav><!-- /.dl-menuwrapper -->
+
+
+
+
+<div id="main" role="main">
+  <article class="hentry">
+    <header class="header-title">
+      <div class="header-title-wrap">
+        
+          <h2 class="entry-title"><a href="http://ranlei.github.io/decorator/" rel="bookmark" title="python装饰器与ANSI C 的宏">python装饰器与ANSI C 的宏</a></h2>
+        
+        <h3>October 15, 2014</h3>
+        
+        <p class="entry-reading-time">
+          <i class="fa fa-clock-o"></i>
+          
+          Reading time ~1 minute
+        </p><!-- /.entry-reading-time -->
+        
+      </div><!-- /.header-title-wrap -->
+    </header>
+    <div class="entry-content">
+      <h3 id="section">前言</h3>
+<p>  在读python代码的时候，经常会遇到带有<strong>@</strong>修饰符号的关键字,比如<strong>@classmethod</strong>
+, <strong>@staticmethod</strong> 这两个关键字修饰类里的函数，表示为类方法和静态方法，可以无需实例化，
+直接调用。这个就是python的装饰器，python装饰器是一个很强大的功能，Tornado里的coroutine,
+Flask的route都用到它。所以我想对平时在编程中遇到的类似机制进行总结。</p>
+
+<h3 id="section-1">装饰器模式</h3>
+<p>  以前看过<a href="http://book.douban.com/subject/2243615/" title="设计模式">Headfirst设计模式</a>，
+讲到装饰模式能够实现动态的为对象添加功能，是从一个对象外部来给对象添加功能。
+通常给对象添加功能，要么直接修改对象添加相应的功能，要么派生对应的子类来扩展，
+抑或是使用对象组合的方式。由于直接修改对应的类这种方式并不可取。
+在面向对象的设计中，而我们也应该尽量使用对象组合，
+而不是对象继承来扩展和复用功能。装饰器模式就是基于对象组合的方式，
+可以很灵活的给对象添加所需要的功能。<strong>装饰器模式的本质就是动态组合
+。动态是手段，组合才是目的</strong>。总之，装饰模式是通过把复杂的功能简单化，
+分散化，然后再运行期间，根据需要来动态组合的这样一个模式。书里面举了一个例子，就是对象村的咖啡店，
+比如，我有一杯苦咖啡，当我需要加糖的时候，直接使用糖装饰器添加一勺即可。当需要加牛奶的时候，使用牛奶
+装饰器即可，无需重新换杯。这就是面向对象的基本原则之一：<strong>多用组合，少用继承</strong>。</p>
+
+<h3 id="ansi-c">ANSI C的宏</h3>
+<p>  为什么会想到宏，因为c语言的宏替换可以将一个表达式替换成另外一个表达式，在替换的时候便可以
+对表达式进行装饰。
+下面看代码：</p>
+
+<div class="highlight"><pre><code class="language-c" data-lang="c"><span class="cp">#include&lt;stdio.h&gt;</span>
+    <span class="cp">#define Macro1(x) (printf(&quot;This is first macro:%d\n&quot;,x))</span>
+    <span class="cp">#define Macro2(x) (printf(&quot;This is second macro:%d\n&quot;,x))</span>
+    
+    <span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+        <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">Macro1</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+        <span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="n">Macro2</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span></code></pre></div>
+
+<p>这里结果的输出是</p>
+
+<p><img src="http://ralefile.qiniudn.com/c_macro.png" alt="result" /></p>
+
+<p>这里__Macro1__修饰了数字3,  __Macro2__修饰了数字4,  功能是修饰中加入了打印语句，但宏不能返回值，只能进行替换，
+但也很强大，<a href="&quot;http://zh.wikipedia.org/wiki/Assert.h&quot;">assert.h</a>标准库就是用
+宏实现的。专门用来帮忙检查bug。初学C的时候往往会忽略他的强大之处。</p>
+
+<h3 id="python">python装饰器</h3>
+
+<p>python装饰器他也可以用来实现装饰器模式，但比装饰器模式灵活，他也可以当作宏来运用，下面看代码：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">decoration1</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+            <span class="k">print</span> <span class="s">&quot;this is decoration1&quot;</span>
+            <span class="k">return</span> <span class="n">func</span>
+        <span class="k">return</span> <span class="n">wrapper</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">decoration2</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+            <span class="k">print</span> <span class="s">&quot;this is decoration2&quot;</span>
+            <span class="k">return</span> <span class="n">func</span>
+        <span class="k">return</span> <span class="n">wrapper</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    
+    <span class="nd">@decoration1</span>
+    <span class="nd">@decoration2</span>
+    <span class="k">def</span> <span class="nf">test</span><span class="p">():</span>
+        <span class="k">print</span> <span class="s">&quot;you&#39;re good guy.&quot;</span>
+    
+    <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+        <span class="n">test</span><span class="p">()</span></code></pre></div>
+
+<p>程序运行截图如下：</p>
+
+<p><img src="http://ralefile.qiniudn.com/python_decorator.png" alt="result" /></p>
+
+<p>它看起来效果和宏一样，这里的 <strong>decoration1</strong> 和 <strong>decoration2</strong> 函数都是在不改变 <strong>test</strong> 函数内部结构的情况下
+修饰 <strong>test</strong> 函数。</p>
+
+<h3 id="section-2">总结</h3>
+<p>python装饰器是一个很强大的东西，既可以用它来实现装饰器模式，也可以当作宏来用。下面附一段缓存装饰器的
+代码：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">time</span>
+
+    <span class="k">def</span> <span class="nf">cache</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
+        <span class="n">cache</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">miss</span> <span class="o">=</span> <span class="nb">object</span><span class="p">()</span>
+        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">argc</span><span class="p">):</span>
+            <span class="c"># print &quot;Use a cache decorators:&quot;</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span><span class="n">miss</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="n">miss</span><span class="p">:</span>
+                <span class="c"># print &quot;Not hitting&quot;</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="n">argc</span><span class="p">)</span>
+                <span class="n">cache</span><span class="p">[</span><span class="n">argc</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span>
+            <span class="k">return</span> <span class="n">result</span>
+        <span class="k">return</span> <span class="n">wrapper</span>
+    
+    <span class="nd">@cache</span>
+    <span class="k">def</span> <span class="nf">fab</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">n</span>
+        <span class="k">return</span> <span class="n">fab</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="n">fab</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
+    
+    <span class="k">print</span> <span class="s">&quot;clock1:</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">time</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span>
+    <span class="n">value</span><span class="o">=</span><span class="n">fab</span><span class="p">(</span><span class="mi">35</span><span class="p">)</span>
+    <span class="k">print</span> <span class="n">value</span>
+    <span class="k">print</span> <span class="s">&quot;clock2:</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">time</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span></code></pre></div>
+
+<p>执行时间如下图：</p>
+
+<p><img src="http://ralefile.qiniudn.com/python_decorator_mem.png" alt="result" /></p>
+
+<p>这样一个计算Fibonacci序列的递归在不用修饰器的cache修饰器的情况下，
+linux下我是在3分钟左右，windows会更长。</p>
+
+
+      <footer class="entry-meta">
+        <span class="entry-tags"><a href="http://ranlei.github.io/tags/#python" title="Pages tagged python" class="tag">python</a></span>
+        <span><a href="http://ranlei.github.io/decorator/" rel="bookmark" title="python装饰器与ANSI C 的宏">python装饰器与ANSI C 的宏</a> was published on <span class="entry-date date published updated"><time datetime="2014-10-15T00:00:00-04:00">October 15, 2014</time></span></span>
+        (revised: <span class="entry-date date modified"><time datetime="2014-10-15">10/15/2014</time></span>)
+        <span class="author vcard"><span class="fn"><a href="http://ranlei.github.io/about/" title="About rale">rale</a></span></span>
+       <!--   -->
+      </footer>
+    </div><!-- /.entry-content -->
+    
+    
+   <!--  <div class="read-more">
+      
+        <div class="read-more-header">
+          <a href="http://ranlei.github.io/quicksort/" class="read-more-btn">Read More</a>
+        </div>
+        <div class="read-more-content">
+          <h3><a href="http://ranlei.github.io/quicksort/" title="快速排序(ANSI C 和 Python实现)">快速排序(ANSI C 和 Python实现)</a></h3>
+          <p>前言  排序算法因其应用的广泛一直以来是计算机科学家探索的古老领域，其中快速排序以其接近于n(logn)的时间复杂度和最多log(2n)的空间复杂度公认为目前最快的排序算法，他是由计算机科学家图灵奖获得者hoare发明的，今天我准备通过ANSI C和Python分别来实现该...&hellip; <a href="http://ranlei.github.io/quicksort/">Continue reading</a></p>
+        </div>
+      
+      
+      <div class="read-more-list">
+        
+      </div>
+      
+    </div> -->
+    <!-- /.read-more -->
+  </article>
+</div><!-- /#main -->
+
+<div class="footer-wrapper">
+  <footer role="contentinfo">
+    <span>&copy; 2014 rale. Powered by <a href="http://jekyllrb.com">Jekyll</a> using the <a href="http://mademistakes.com/hpstr/">HPSTR Theme</a>.</span>
+  </footer>
+</div><!-- /.footer-wrapper -->
+
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script>window.jQuery || document.write('<script src="http://ranlei.github.io/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="http://ranlei.github.io/assets/js/scripts.min.js"></script>
+
+<!--  -->
+
+</body>
+</html>

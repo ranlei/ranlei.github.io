@@ -4,13 +4,140 @@
 <generator uri="https://github.com/mojombo/jekyll">Jekyll</generator>
 <link rel="self" type="application/atom+xml" href="http://ranlei.github.io/feed.xml" />
 <link rel="alternate" type="text/html" href="http://ranlei.github.io" />
-<updated>2014-10-14T09:24:38-04:00</updated>
+<updated>2014-10-15T06:24:59-04:00</updated>
 <id>http://ranlei.github.io/</id>
 <author>
   <name>rale</name>
   <uri>http://ranlei.github.io/</uri>
   <email>ranleixxx@email.com</email>
 </author>
+
+
+<entry>
+  <title type="html"><![CDATA[python装饰器与ANSI C 的宏]]></title>
+ <link rel="alternate" type="text/html" href="http://ranlei.github.io/decorator/" />
+  <id>http://ranlei.github.io/decorator</id>
+  <updated>2014-10-15T00:00:00-00:00</updated>
+  <published>2014-10-15T00:00:00-04:00</published>
+  
+  <author>
+    <name>rale</name>
+    <uri>http://ranlei.github.io</uri>
+    <email>ranleixxx@email.com</email>
+  </author>
+  <content type="html">&lt;h3 id=&quot;section&quot;&gt;前言&lt;/h3&gt;
+&lt;p&gt;  在读python代码的时候，经常会遇到带有&lt;strong&gt;@&lt;/strong&gt;修饰符号的关键字,比如&lt;strong&gt;@classmethod&lt;/strong&gt;
+, &lt;strong&gt;@staticmethod&lt;/strong&gt; 这两个关键字修饰类里的函数，表示为类方法和静态方法，可以无需实例化，
+直接调用。这个就是python的装饰器，python装饰器是一个很强大的功能，Tornado里的coroutine,
+Flask的route都用到它。所以我想对平时在编程中遇到的类似机制进行总结。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-1&quot;&gt;装饰器模式&lt;/h3&gt;
+&lt;p&gt;  以前看过&lt;a href=&quot;http://book.douban.com/subject/2243615/&quot; title=&quot;设计模式&quot;&gt;Headfirst设计模式&lt;/a&gt;，
+讲到装饰模式能够实现动态的为对象添加功能，是从一个对象外部来给对象添加功能。
+通常给对象添加功能，要么直接修改对象添加相应的功能，要么派生对应的子类来扩展，
+抑或是使用对象组合的方式。由于直接修改对应的类这种方式并不可取。
+在面向对象的设计中，而我们也应该尽量使用对象组合，
+而不是对象继承来扩展和复用功能。装饰器模式就是基于对象组合的方式，
+可以很灵活的给对象添加所需要的功能。&lt;strong&gt;装饰器模式的本质就是动态组合
+。动态是手段，组合才是目的&lt;/strong&gt;。总之，装饰模式是通过把复杂的功能简单化，
+分散化，然后再运行期间，根据需要来动态组合的这样一个模式。书里面举了一个例子，就是对象村的咖啡店，
+比如，我有一杯苦咖啡，当我需要加糖的时候，直接使用糖装饰器添加一勺即可。当需要加牛奶的时候，使用牛奶
+装饰器即可，无需重新换杯。这就是面向对象的基本原则之一：&lt;strong&gt;多用组合，少用继承&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;h3 id=&quot;ansi-c&quot;&gt;ANSI C的宏&lt;/h3&gt;
+&lt;p&gt;  为什么会想到宏，因为c语言的宏替换可以将一个表达式替换成另外一个表达式，在替换的时候便可以
+对表达式进行装饰。
+下面看代码：&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span class=&quot;cp&quot;&gt;#include&amp;lt;stdio.h&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;cp&quot;&gt;#define Macro1(x) (printf(&amp;quot;This is first macro:%d\n&amp;quot;,x))&lt;/span&gt;
+    &lt;span class=&quot;cp&quot;&gt;#define Macro2(x) (printf(&amp;quot;This is second macro:%d\n&amp;quot;,x))&lt;/span&gt;
+    
+    &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Macro1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Macro2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;这里结果的输出是&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://ralefile.qiniudn.com/c_macro.png&quot; alt=&quot;result&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;这里__Macro1__修饰了数字3,  __Macro2__修饰了数字4,  功能是修饰中加入了打印语句，但宏不能返回值，只能进行替换，
+但也很强大，&lt;a href=&quot;&amp;quot;http://zh.wikipedia.org/wiki/Assert.h&amp;quot;&quot;&gt;assert.h&lt;/a&gt;标准库就是用
+宏实现的。专门用来帮忙检查bug。初学C的时候往往会忽略他的强大之处。&lt;/p&gt;
+
+&lt;h3 id=&quot;python&quot;&gt;python装饰器&lt;/h3&gt;
+
+&lt;p&gt;python装饰器他也可以用来实现装饰器模式，但比装饰器模式灵活，他也可以当作宏来运用，下面看代码：&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;decoration1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;wrapper&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;this is decoration1&amp;quot;&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;func&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;wrapper&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;decoration2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;wrapper&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;this is decoration2&amp;quot;&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;func&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;wrapper&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    
+    &lt;span class=&quot;nd&quot;&gt;@decoration1&lt;/span&gt;
+    &lt;span class=&quot;nd&quot;&gt;@decoration2&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;you&amp;#39;re good guy.&amp;quot;&lt;/span&gt;
+    
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;__name__&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;__main__&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;程序运行截图如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://ralefile.qiniudn.com/python_decorator.png&quot; alt=&quot;result&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;它看起来效果和宏一样，这里的 &lt;strong&gt;decoration1&lt;/strong&gt; 和 &lt;strong&gt;decoration2&lt;/strong&gt; 函数都是在不改变 &lt;strong&gt;test&lt;/strong&gt; 函数内部结构的情况下
+修饰 &lt;strong&gt;test&lt;/strong&gt; 函数。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-2&quot;&gt;总结&lt;/h3&gt;
+&lt;p&gt;python装饰器是一个很强大的东西，既可以用它来实现装饰器模式，也可以当作宏来用。下面附一段缓存装饰器的
+代码：&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;time&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;cache&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;cache&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{}&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;miss&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;object&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;wrapper&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;argc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+            &lt;span class=&quot;c&quot;&gt;# print &amp;quot;Use a cache decorators:&amp;quot;&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cache&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;argc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;miss&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;is&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;miss&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+                &lt;span class=&quot;c&quot;&gt;# print &amp;quot;Not hitting&amp;quot;&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;argc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;cache&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;argc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;wrapper&lt;/span&gt;
+    
+    &lt;span class=&quot;nd&quot;&gt;@cache&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;fab&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fab&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fab&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    
+    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;clock1:&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%s&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;clock&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fab&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;35&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;clock2:&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%s&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;clock&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;执行时间如下图：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://ralefile.qiniudn.com/python_decorator_mem.png&quot; alt=&quot;result&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;这样一个计算Fibonacci序列的递归在不用修饰器的cache修饰器的情况下，
+linux下我是在3分钟左右，windows会更长。&lt;/p&gt;
+
+
+  &lt;p&gt;&lt;a href=&quot;http://ranlei.github.io/decorator/&quot;&gt;python装饰器与ANSI C 的宏&lt;/a&gt; was originally published by rale at &lt;a href=&quot;http://ranlei.github.io&quot;&gt;rale's Melon&lt;/a&gt; on October 15, 2014.&lt;/p&gt;</content>
+</entry>
 
 
 <entry>

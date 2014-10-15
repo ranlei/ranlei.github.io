@@ -121,6 +121,137 @@
 <article class="hentry">
   <header>
     <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2014-10-15T00:00:00-04:00"><a href="http://ranlei.github.io/decorator/">October 15, 2014</a></time></span><span class="author vcard"><span class="fn"><a href="http://ranlei.github.io/about/" title="About rale">rale</a></span></span>
+      
+      <span class="entry-reading-time pull-right">
+        <i class="fa fa-clock-o"></i>
+        
+        Reading time ~1 minute
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="http://ranlei.github.io/decorator/" rel="bookmark" title="python装饰器与ANSI C 的宏" itemprop="url">python装饰器与ANSI C 的宏</a></h1>
+    
+  </header>
+  <div class="entry-content">
+    <h3 id="section">前言</h3>
+<p>  在读python代码的时候，经常会遇到带有<strong>@</strong>修饰符号的关键字,比如<strong>@classmethod</strong>
+, <strong>@staticmethod</strong> 这两个关键字修饰类里的函数，表示为类方法和静态方法，可以无需实例化，
+直接调用。这个就是python的装饰器，python装饰器是一个很强大的功能，Tornado里的coroutine,
+Flask的route都用到它。所以我想对平时在编程中遇到的类似机制进行总结。</p>
+
+<h3 id="section-1">装饰器模式</h3>
+<p>  以前看过<a href="http://book.douban.com/subject/2243615/" title="设计模式">Headfirst设计模式</a>，
+讲到装饰模式能够实现动态的为对象添加功能，是从一个对象外部来给对象添加功能。
+通常给对象添加功能，要么直接修改对象添加相应的功能，要么派生对应的子类来扩展，
+抑或是使用对象组合的方式。由于直接修改对应的类这种方式并不可取。
+在面向对象的设计中，而我们也应该尽量使用对象组合，
+而不是对象继承来扩展和复用功能。装饰器模式就是基于对象组合的方式，
+可以很灵活的给对象添加所需要的功能。<strong>装饰器模式的本质就是动态组合
+。动态是手段，组合才是目的</strong>。总之，装饰模式是通过把复杂的功能简单化，
+分散化，然后再运行期间，根据需要来动态组合的这样一个模式。书里面举了一个例子，就是对象村的咖啡店，
+比如，我有一杯苦咖啡，当我需要加糖的时候，直接使用糖装饰器添加一勺即可。当需要加牛奶的时候，使用牛奶
+装饰器即可，无需重新换杯。这就是面向对象的基本原则之一：<strong>多用组合，少用继承</strong>。</p>
+
+<h3 id="ansi-c">ANSI C的宏</h3>
+<p>  为什么会想到宏，因为c语言的宏替换可以将一个表达式替换成另外一个表达式，在替换的时候便可以
+对表达式进行装饰。
+下面看代码：</p>
+
+<div class="highlight"><pre><code class="language-c" data-lang="c"><span class="cp">#include&lt;stdio.h&gt;</span>
+    <span class="cp">#define Macro1(x) (printf(&quot;This is first macro:%d\n&quot;,x))</span>
+    <span class="cp">#define Macro2(x) (printf(&quot;This is second macro:%d\n&quot;,x))</span>
+    
+    <span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+        <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">Macro1</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+        <span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="n">Macro2</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span></code></pre></div>
+
+<p>这里结果的输出是</p>
+
+<p><img src="http://ralefile.qiniudn.com/c_macro.png" alt="result" /></p>
+
+<p>这里__Macro1__修饰了数字3,  __Macro2__修饰了数字4,  功能是修饰中加入了打印语句，但宏不能返回值，只能进行替换，
+但也很强大，<a href="&quot;http://zh.wikipedia.org/wiki/Assert.h&quot;">assert.h</a>标准库就是用
+宏实现的。专门用来帮忙检查bug。初学C的时候往往会忽略他的强大之处。</p>
+
+<h3 id="python">python装饰器</h3>
+
+<p>python装饰器他也可以用来实现装饰器模式，但比装饰器模式灵活，他也可以当作宏来运用，下面看代码：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">decoration1</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+            <span class="k">print</span> <span class="s">&quot;this is decoration1&quot;</span>
+            <span class="k">return</span> <span class="n">func</span>
+        <span class="k">return</span> <span class="n">wrapper</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">decoration2</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+            <span class="k">print</span> <span class="s">&quot;this is decoration2&quot;</span>
+            <span class="k">return</span> <span class="n">func</span>
+        <span class="k">return</span> <span class="n">wrapper</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    
+    <span class="nd">@decoration1</span>
+    <span class="nd">@decoration2</span>
+    <span class="k">def</span> <span class="nf">test</span><span class="p">():</span>
+        <span class="k">print</span> <span class="s">&quot;you&#39;re good guy.&quot;</span>
+    
+    <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+        <span class="n">test</span><span class="p">()</span></code></pre></div>
+
+<p>程序运行截图如下：</p>
+
+<p><img src="http://ralefile.qiniudn.com/python_decorator.png" alt="result" /></p>
+
+<p>它看起来效果和宏一样，这里的 <strong>decoration1</strong> 和 <strong>decoration2</strong> 函数都是在不改变 <strong>test</strong> 函数内部结构的情况下
+修饰 <strong>test</strong> 函数。</p>
+
+<h3 id="section-2">总结</h3>
+<p>python装饰器是一个很强大的东西，既可以用它来实现装饰器模式，也可以当作宏来用。下面附一段缓存装饰器的
+代码：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">time</span>
+
+    <span class="k">def</span> <span class="nf">cache</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
+        <span class="n">cache</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">miss</span> <span class="o">=</span> <span class="nb">object</span><span class="p">()</span>
+        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">argc</span><span class="p">):</span>
+            <span class="c"># print &quot;Use a cache decorators:&quot;</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span><span class="n">miss</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="n">miss</span><span class="p">:</span>
+                <span class="c"># print &quot;Not hitting&quot;</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="n">argc</span><span class="p">)</span>
+                <span class="n">cache</span><span class="p">[</span><span class="n">argc</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span>
+            <span class="k">return</span> <span class="n">result</span>
+        <span class="k">return</span> <span class="n">wrapper</span>
+    
+    <span class="nd">@cache</span>
+    <span class="k">def</span> <span class="nf">fab</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">n</span>
+        <span class="k">return</span> <span class="n">fab</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="n">fab</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
+    
+    <span class="k">print</span> <span class="s">&quot;clock1:</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">time</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span>
+    <span class="n">value</span><span class="o">=</span><span class="n">fab</span><span class="p">(</span><span class="mi">35</span><span class="p">)</span>
+    <span class="k">print</span> <span class="n">value</span>
+    <span class="k">print</span> <span class="s">&quot;clock2:</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">time</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span></code></pre></div>
+
+<p>执行时间如下图：</p>
+
+<p><img src="http://ralefile.qiniudn.com/python_decorator_mem.png" alt="result" /></p>
+
+<p>这样一个计算Fibonacci序列的递归在不用修饰器的cache修饰器的情况下，
+linux下我是在3分钟左右，windows会更长。</p>
+
+
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    <div class="entry-meta">
       <span class="entry-date date published updated"><time datetime="2014-10-14T00:00:00-04:00"><a href="http://ranlei.github.io/quicksort/">October 14, 2014</a></time></span><span class="author vcard"><span class="fn"><a href="http://ranlei.github.io/about/" title="About rale">rale</a></span></span>
       
       <span class="entry-reading-time pull-right">
