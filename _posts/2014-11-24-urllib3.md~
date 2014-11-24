@@ -1,7 +1,8 @@
 ---
-layout:post
-title:urllib3的抓取问题
-description:"urllib,urllib2都是python的标准网络包，一般用于网页的抓取。"
+layout: post
+title: urllib3的抓取问题
+description: "urllib,urllib2都是python的标准网络包，一般用于网页的抓取。"
+modified: 2014-11-24
 tags: [algorithms]
 ---
 
@@ -91,18 +92,25 @@ tags: [algorithms]
 	    print("Completed urllib2_get in %0.3fs" % urllib_elapsed)
 
 {% endhighlight %}
+
 >
 > 第一次结果：
 >Completed pool_get in 0.504s
 >Completed urllib_get in 0.323s
 >Completed urllib2_get in 0.323s
 >
+
 >第二次结果：
+>
 >Completed pool_get in 0.317s
+>
 >Completed urllib_get in 0.457s
+>
 >Completed urllib2_get in 0.457s
 >
->
+
+
+
 &emsp;&emsp;我的测试网络稳定,反而在第一次时urllib3慢于urllib2和urllib,明显urllib和urllib2在抓取上机制相同。我多次测试后，上述结果基本保持稳定。可见，urllib3并没有官方说的那么高性能。只能说明该包对于重用tcp连接的重用率极低。在速度上面并没有明显的提升。对于
 
 ###总结
