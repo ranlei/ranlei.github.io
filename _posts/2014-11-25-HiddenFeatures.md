@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Python中隐藏的特点
+title: Python中的隐藏特点
 description: "python中有许多我们平时很少用到但是很Pythonic的特点，该文章是stackoverflow上的一个问题，个人觉得很不错，就翻译了过来。"
 modified: 2014-11-25
 tags: [python]
@@ -12,7 +12,8 @@ tags: [python]
 ####运算符的链式比较
 
 {% highlight python %}
-    
+   
+    Example:
     >>> x = 5
     >>> 1 < x < 10
     True
