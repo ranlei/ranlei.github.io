@@ -1,14 +1,14 @@
 ---
 layout: post
 title: urllib3的抓取问题
-description: "urllib,urllib2都是python的标准网络包，一般用于网页的抓取。"
+description: "urllib,urllib2都是python的标准网络包，一般用于网页的抓取."
 modified: 2014-11-24
-tags: [algorithms]
+tags: [python]
 ---
 
 ###前言
 
-&emsp;&emsp;昨天在ptipython下输入urllib时出现提示有一个urllib3的python包，可能是某些应用使用的依赖包，于是在pip搜索了下，github[地址](https://github.com/shazow/urllib3),看到官方介绍，貌似很酷炫的样子，是一个高性能，线程安全，且能重用tcp连接的库。
+&emsp;&emsp;昨天在ptipython下输入urllib代码补全时出现提示有一个urllib3的python包，可能是某些应用使用的依赖包，于是在pip搜索了一下，[github地址](https://github.com/shazow/urllib3),看到官方介绍，貌似很酷炫的样子：称该包是一个高性能，线程安全，且能重用tcp连接的库。
 
 ###测试
 &emsp;&emsp;根据官方的benchmark test我添加了urllib2的测试，为了体现urllib3的重用连接优点，我特意找了一个接口，能够让urllib3最大限度重用tcp连接，测试demo如下：
@@ -93,29 +93,27 @@ tags: [algorithms]
 
 {% endhighlight %}
 
->
-> 第一次结果：
->Completed pool_get in 0.504s
->Completed urllib_get in 0.323s
->Completed urllib2_get in 0.323s
->
+{%highlight c %}
 
->第二次结果：
->
->Completed pool_get in 0.317s
->
->Completed urllib_get in 0.457s
->
->Completed urllib2_get in 0.457s
->
+    第一次结果：
+    Completed pool_get in 0.504s
+    Completed urllib_get in 0.323s
+    Completed urllib2_get in 0.323s
+
+
+     第二次结果：
+     Completed pool_get in 0.317s
+     Completed urllib_get in 0.457s
+     Completed urllib2_get in 0.457s
+{% endhighlight %}
 
 
 
-&emsp;&emsp;我的测试网络稳定,反而在第一次时urllib3慢于urllib2和urllib,明显urllib和urllib2在抓取上机制相同。我多次测试后，上述结果基本保持稳定。可见，urllib3并没有官方说的那么高性能。只能说明该包对于重用tcp连接的重用率极低。在速度上面并没有明显的提升。对于
+&emsp;&emsp;我的测试网络稳定,反而在第一次时urllib3慢于urllib2和urllib,明显urllib和urllib2在抓取上机制相同。我多次测试后，上述结果基本保持稳定。可见，urllib3并没有官方说的那么高性能。只能说明该包对于重用tcp连接的重用率极低。在速度上面并没有明显的提升。
 
 ###总结
 
-&emsp;&emsp;相对于urllib，urllib3并没有在速度上有所提升，反而更慢，不过其官方特性说使用了安全连接，对于学校的一些模拟登录来说，可能会更适用一点。对一些基本的网络抓取，还是使用urllib更快速。不过对于urllib的设计来说，还是有一个可取之处，类风格使用新式类，个人是比较方案旧式风格的类。
+&emsp;&emsp;相对于urllib，urllib3并没有在速度上有所提升，反而更慢，不过其官方特性说使用了安全连接，这点没有去测试，如果描述真实的话，对于学校的一些模拟登录来说，可能会更适用一点。对一些基本的网络抓取，还是使用urllib更快速。不过对于urllib的设计来说，还是有一个可取之处，类风格使用新式类，语义描述更明确直观，返回的对象是response等。
 
 
 
