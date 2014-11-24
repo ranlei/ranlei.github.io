@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 快速排序(ANSI C 和 Python实现)
-descripthon: "排序算法因其应用的广泛一直以来是计算机科学家探索的古老领域，其中快速排序以其接近于n(logn)的时间复杂度和最多log(2n)的空间复杂度公认为
+description: "排序算法因其应用的广泛一直以来是计算机科学家探索的古老领域，其中快速排序以其接近于n(logn)的时间复杂度和最多log(2n)的空间复杂度公认为
 目前最快的排序算法."
 modified: 2014-10-14
 tags: [algorithms]

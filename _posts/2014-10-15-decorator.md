@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  python装饰器与ANSI C 的宏
-descripthon: "python装饰器是一个很强大的东西，既可以用它来实现装饰器模式，也可以当作宏来用"
+title:  Python装饰器与ANSI C 的宏
+description: "python装饰器是一个很强大的东西，既可以用它来实现装饰器模式，也可以当作宏来用"
 modified: 2014-10-15
 tags: [python]
 ---
