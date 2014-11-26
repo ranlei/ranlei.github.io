@@ -121,6 +121,170 @@
 <article class="hentry">
   <header>
     <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2014-11-25T00:00:00-05:00"><a href="http://ranlei.github.io/HiddenFeatures/">November 25, 2014</a></time></span><span class="author vcard"><span class="fn"><a href="http://ranlei.github.io/about/" title="About rale">rale</a></span></span>
+      
+      <span class="entry-reading-time pull-right">
+        <i class="fa fa-clock-o"></i>
+        
+        Reading time ~1 minute
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="http://ranlei.github.io/HiddenFeatures/" rel="bookmark" title="Python中的隐藏特点" itemprop="url">Python中的隐藏特点</a></h1>
+    
+  </header>
+  <div class="entry-content">
+    <h3 id="section">前言</h3>
+<p>  该篇文章是来自于stackoverflow上的一个问题，<a href="http://stackoverflow.com/questions/101268/hidden-features-of-python">原文地址</a>,个人觉得很不错，就将它翻译了过来。可能有些单词翻译的不太准确，欢迎矫正。</p>
+
+<h4 id="section-1">运算符的链式比较</h4>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">Example</span><span class="p">:</span>
+    <span class="o">&gt;&gt;&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="o">&gt;&gt;&gt;</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">10</span>
+    <span class="bp">True</span>
+    <span class="o">&gt;&gt;&gt;</span> <span class="mi">10</span> <span class="o">&lt;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">20</span> 
+    <span class="bp">False</span>
+    <span class="o">&gt;&gt;&gt;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="o">&lt;</span> <span class="n">x</span><span class="o">*</span><span class="mi">10</span> <span class="o">&lt;</span> <span class="mi">100</span>
+    <span class="bp">True</span>
+    <span class="o">&gt;&gt;&gt;</span> <span class="mi">10</span> <span class="o">&gt;</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="mi">9</span>
+    <span class="bp">True</span>
+    <span class="o">&gt;&gt;&gt;</span> <span class="mi">5</span> <span class="o">==</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">4</span>
+    <span class="bp">True</span></code></pre></div>
+
+<p>  在这个例子中，你可能认为首先运算 <strong>1&lt;x</strong>，得到结果为 <strong>True</strong> ,接着运算 <strong>True &lt; 10</strong> ,得到结果为 <strong>True</strong> .但是，事实并非如此，看最后一个表达式计算，你就知道并非这样，比如第一个表达式，他其实是转化成了 <strong>1&lt;x and x &lt; 10</strong> .第二个表达式转化成了 <strong>x&lt;10 and 10&lt;x<em>10 and x</em>10&lt;100</strong> ,为了更少的打印，每个表达式只计算了一次(告诉你，自己玩吧)。评论里有提到，lisp也是这种类似的机制。</p>
+
+
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2014-11-24T00:00:00-05:00"><a href="http://ranlei.github.io/urllib3/">November 24, 2014</a></time></span><span class="author vcard"><span class="fn"><a href="http://ranlei.github.io/about/" title="About rale">rale</a></span></span>
+      
+      <span class="entry-reading-time pull-right">
+        <i class="fa fa-clock-o"></i>
+        
+        Reading time ~2 minutes
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="http://ranlei.github.io/urllib3/" rel="bookmark" title="urllib3的抓取问题" itemprop="url">urllib3的抓取问题</a></h1>
+    
+  </header>
+  <div class="entry-content">
+    <h3 id="section">前言</h3>
+
+<p>  昨天在ptipython下输入urllib代码补全时出现提示有一个urllib3的python包，可能是某些应用使用的依赖包，于是在pip搜索了一下，<a href="https://github.com/shazow/urllib3">github地址</a>,看到官方介绍，貌似很酷炫的样子：称该包是一个高性能，线程安全，且能重用tcp连接的库。</p>
+
+<h3 id="section-1">测试</h3>
+<p>  根据官方的benchmark test我添加了urllib2的测试，为了体现urllib3的重用连接优点，我特意找了一个接口，能够让urllib3最大限度重用tcp连接，测试demo如下：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#!/usr/bin/env python</span>
+	<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+	<span class="kn">import</span> <span class="nn">sys</span>
+	<span class="kn">import</span> <span class="nn">time</span>
+	<span class="kn">import</span> <span class="nn">urllib</span>
+	<span class="kn">import</span> <span class="nn">urllib2</span>
+
+	<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;../&#39;</span><span class="p">)</span>
+	<span class="kn">import</span> <span class="nn">urllib3</span>
+
+
+	<span class="c"># URLs to download. Doesn&#39;t matter as long as they&#39;re from the same host, so we</span>
+	<span class="c"># can take advantage of connection re-using.</span>
+	<span class="n">TO_DOWNLOAD</span> <span class="o">=</span> <span class="p">[</span>
+	    <span class="s">&#39;http://www.gandong.com/xml/132.xml&#39;</span><span class="p">,</span>
+	    <span class="s">&#39;http://www.gandong.com/xml/135.xml&#39;</span><span class="p">,</span>
+	    <span class="s">&#39;http://www.gandong.com/xml/134.xml&#39;</span><span class="p">,</span>
+	    <span class="s">&#39;http://www.gandong.com/xml/136.xml&#39;</span><span class="p">,</span>
+	    <span class="s">&#39;http://www.gandong.com/xml/137.xml&#39;</span><span class="p">,</span>
+	    <span class="s">&#39;http://www.gandong.com/xml/138.xml&#39;</span><span class="p">,</span>
+	    <span class="s">&#39;http://www.gandong.com/xml/139.xml&#39;</span><span class="p">,</span>
+	    <span class="s">&#39;http://www.gandong.com/xml/151.xml&#39;</span><span class="p">,</span>
+	    <span class="s">&#39;http://www.gandong.com/xml/152.xml&#39;</span><span class="p">,</span>
+	    <span class="s">&#39;http://www.gandong.com/xml/153.xml&#39;</span><span class="p">,</span>
+	    <span class="s">&#39;http://www.gandong.com/xml/154.xml&#39;</span><span class="p">,</span>
+	    <span class="s">&#39;http://www.gandong.com/xml/156.xml&#39;</span><span class="p">,</span>
+	    <span class="s">&#39;http://www.gandong.com/xml/158.xml&#39;</span><span class="p">,</span>
+	    <span class="s">&#39;http://www.gandong.com/xml/163.xml&#39;</span><span class="p">,</span>
+	    <span class="s">&#39;http://www.gandong.com/xml/164.xml&#39;</span><span class="p">,</span>
+	<span class="p">]</span>
+
+
+	<span class="k">def</span> <span class="nf">urllib_get</span><span class="p">(</span><span class="n">url_list</span><span class="p">):</span>
+	    <span class="k">assert</span> <span class="n">url_list</span>
+	    <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">url_list</span><span class="p">:</span>
+		<span class="n">now</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+		<span class="n">r</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+		<span class="n">elapsed</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">now</span>
+		<span class="k">print</span><span class="p">(</span><span class="s">&quot;Got in </span><span class="si">%0.3f</span><span class="s">: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">elapsed</span><span class="p">,</span> <span class="n">url</span><span class="p">))</span>
+
+	<span class="k">def</span> <span class="nf">urllib2_get</span><span class="p">(</span><span class="n">url_list</span><span class="p">):</span>
+	    <span class="k">assert</span> <span class="n">url_list</span>
+	    <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">url_list</span><span class="p">:</span>
+		<span class="n">now</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+		<span class="n">r</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+		<span class="n">elapsed</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span><span class="n">now</span>
+		<span class="k">print</span><span class="p">(</span><span class="s">&quot;Got in </span><span class="si">%0.3f</span><span class="s">: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">elapsed</span><span class="p">,</span> <span class="n">url</span><span class="p">))</span>
+
+	<span class="k">def</span> <span class="nf">pool_get</span><span class="p">(</span><span class="n">url_list</span><span class="p">):</span>
+	    <span class="k">assert</span> <span class="n">url_list</span>
+	    <span class="n">pool</span> <span class="o">=</span> <span class="n">urllib3</span><span class="o">.</span><span class="n">PoolManager</span><span class="p">()</span>
+	    <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">url_list</span><span class="p">:</span>
+		<span class="n">now</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+		<span class="n">r</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">assert_same_host</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+		<span class="n">elapsed</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">now</span>
+		<span class="k">print</span><span class="p">(</span><span class="s">&quot;Got in </span><span class="si">%0.3f</span><span class="s">s: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">elapsed</span><span class="p">,</span> <span class="n">url</span><span class="p">))</span>
+
+
+	<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+	    <span class="k">print</span><span class="p">(</span><span class="s">&quot;Running pool_get ...&quot;</span><span class="p">)</span>
+	    <span class="n">now</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+	    <span class="n">pool_get</span><span class="p">(</span><span class="n">TO_DOWNLOAD</span><span class="p">)</span>
+	    <span class="n">pool_elapsed</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">now</span>
+
+	    <span class="k">print</span><span class="p">(</span><span class="s">&quot;Running urllib_get ...&quot;</span><span class="p">)</span>
+	    <span class="n">now</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+	    <span class="n">urllib_get</span><span class="p">(</span><span class="n">TO_DOWNLOAD</span><span class="p">)</span>
+	    <span class="n">urllib_elapsed</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">now</span>
+
+	    <span class="k">print</span><span class="p">(</span><span class="s">&quot;Running urllib2_get ...&quot;</span><span class="p">)</span>
+	    <span class="n">now</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+	    <span class="n">urllib2_get</span><span class="p">(</span><span class="n">TO_DOWNLOAD</span><span class="p">)</span>
+	    <span class="n">urllib2_elapsed</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">now</span>
+
+	    <span class="k">print</span><span class="p">(</span><span class="s">&quot;Completed pool_get in </span><span class="si">%0.3f</span><span class="s">s&quot;</span> <span class="o">%</span> <span class="n">pool_elapsed</span><span class="p">)</span>
+	    <span class="k">print</span><span class="p">(</span><span class="s">&quot;Completed urllib_get in </span><span class="si">%0.3f</span><span class="s">s&quot;</span> <span class="o">%</span> <span class="n">urllib_elapsed</span><span class="p">)</span>
+	    <span class="k">print</span><span class="p">(</span><span class="s">&quot;Completed urllib2_get in </span><span class="si">%0.3f</span><span class="s">s&quot;</span> <span class="o">%</span> <span class="n">urllib_elapsed</span><span class="p">)</span></code></pre></div>
+
+<div class="highlight"><pre><code class="language-c" data-lang="c"><span class="err">第一次结果：</span>
+    <span class="n">Completed</span> <span class="n">pool_get</span> <span class="n">in</span> <span class="mf">0.504</span><span class="n">s</span>
+    <span class="n">Completed</span> <span class="n">urllib_get</span> <span class="n">in</span> <span class="mf">0.323</span><span class="n">s</span>
+    <span class="n">Completed</span> <span class="n">urllib2_get</span> <span class="n">in</span> <span class="mf">0.323</span><span class="n">s</span>
+
+
+     <span class="err">第二次结果：</span>
+     <span class="n">Completed</span> <span class="n">pool_get</span> <span class="n">in</span> <span class="mf">0.317</span><span class="n">s</span>
+     <span class="n">Completed</span> <span class="n">urllib_get</span> <span class="n">in</span> <span class="mf">0.457</span><span class="n">s</span>
+     <span class="n">Completed</span> <span class="n">urllib2_get</span> <span class="n">in</span> <span class="mf">0.457</span><span class="n">s</span></code></pre></div>
+
+<p>  我的测试网络稳定,反而在第一次时urllib3慢于urllib2和urllib,明显urllib和urllib2在抓取上机制相同。我多次测试后，上述结果基本保持稳定。可见，urllib3并没有官方说的那么高性能。只能说明该包对于重用tcp连接的重用率极低。在速度上面并没有明显的提升。</p>
+
+<h3 id="section-2">总结</h3>
+
+<p>  相对于urllib，urllib3并没有在速度上有所提升，反而更慢，不过其官方特性说使用了安全连接，这点没有去测试，如果描述真实的话，对于学校的一些模拟登录来说，可能会更适用一点。对一些基本的网络抓取，还是使用urllib更快速。不过对于urllib的设计来说，还是有一个可取之处，类风格使用新式类，语义描述更明确直观，返回的对象是response等。</p>
+
+
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    <div class="entry-meta">
       <span class="entry-date date published updated"><time datetime="2014-10-15T00:00:00-04:00"><a href="http://ranlei.github.io/decorator/">October 15, 2014</a></time></span><span class="author vcard"><span class="fn"><a href="http://ranlei.github.io/about/" title="About rale">rale</a></span></span>
       
       <span class="entry-reading-time pull-right">
@@ -131,7 +295,7 @@
       
     </div><!-- /.entry-meta -->
     
-      <h1 class="entry-title"><a href="http://ranlei.github.io/decorator/" rel="bookmark" title="python装饰器与ANSI C 的宏" itemprop="url">python装饰器与ANSI C 的宏</a></h1>
+      <h1 class="entry-title"><a href="http://ranlei.github.io/decorator/" rel="bookmark" title="Python装饰器与ANSI C 的宏" itemprop="url">Python装饰器与ANSI C 的宏</a></h1>
     
   </header>
   <div class="entry-content">
