@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 阻塞和非阻塞并发队列算法
+title: d阻塞和非阻塞并发队列算法
 description:"我们将描述两个具有实践性的算法，一个非阻塞的并发队列算法，以及另一个具有入队锁和出队锁的阻塞算法。"
 modified: 2014-12-01
 tags: [algorithms]
