@@ -67,6 +67,58 @@ tags: [python]
 这个指令(`a,b = b,a`)右边的表达式创建了一个新元组，左边的立马解包到变量a,b。在这条指令过后，a,b的值已经被交换，而 `a,b`这个新元祖也未被GC标记和引用，所以未被回收。
 
 
+####for...else语句
+
+&emsp;&emsp;
+
+{% highlight python %}
+    for i in foo:
+        if i == 0:
+            break
+    else:
+        print('i was never zero.)
+
+{% endhighlight %}
+这个程序在 `break` 没有被调用的时候会执行，这段代码还可以使用下面这段通俗代码来理解：
+{% highlight python %}
+    found = False
+    for i in foo:
+        if i == 0:
+            found = True
+            break
+    if not found:
+        print('i was never zero.')
+
+{% endhighlight %}
+不过这个特点还是少用比较好，放在for循环内部就可以了，放在外部有可能和其他的if语句引起bug.
+
+####指定名字的格式化
+
+`%`可以像字典一样对参数进行格式化：
+{% highlight python %}
+    for example:
+    >>> print "The %(foo)s is %(bar)i." % {'foo': 'answer', 'bar':42}
+    The answer is 42.
+
+    >>> foo, bar = 'question', 123
+
+    >>> print "The %(foo)s is %(bar)i." % locals()
+    The question is 123.
+
+{% endhighlight %}
+`locals()`也是字典，你可以使用`locals()` 和 `%` 替换本地变量。
+
+新风格的格式化：
+{% highlight python %}
+    >>> print("The {foo} is {bar}".format(foo='answer', bar=42))
+{% endhighlight %}
+推荐新风格，新风格跟有`pythonic`的感觉。
+
+####使用.pth文件添加路径
+
+&emsp;&emsp;添加python包路径的最好办法是使用.pth文件进行添加路径，每一行只能包含一条路径，这些路径会添加到`sys.path`中，而且安装的目录不会覆盖原来的标准模块，这个机制意味着你不能安装标准模块的固定版本(因为都会存在).
+
+
 ------
 
 
