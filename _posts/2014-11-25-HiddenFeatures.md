@@ -118,6 +118,50 @@ tags: [python]
 
 &emsp;&emsp;添加python包路径的最好办法是使用.pth文件进行添加路径，每一行只能包含一条路径，这些路径会添加到`sys.path`中，而且安装的目录不会覆盖原来的标准模块，这个机制意味着你不能安装标准模块的固定版本(因为都会存在).
 
+####`set`内置的操作符重载
+
+&emsp;&emsp;集合类型内置了许多操作符号的重载，比如` & `,` | `等。
+{% highlight python %}
+    for example:
+        >>> a = set([1,2,3,4])
+        >>> b = set([3,4,5,6])
+        >>> a | b # Union
+        {1, 2, 3, 4, 5, 6}
+        >>> a & b # Intersection
+        {3, 4}
+        >>> a < b # Subset
+        False
+        >>> a - b # Difference
+        {1, 2}
+        >>> a ^ b # Symmetric Difference
+        {1, 2, 5, 6}
+
+
+{% endhighlight %}
+
+####嵌套的列表表达式和生成表达式
+{ highlight python }
+    for example:
+    [(i,j) for i in range(3) for j in range(i) ]    
+    ((i,j) for i in range(4) for j in range(i) )
+{% endhighlight %}
+
+&emsp;&emsp;python的列表表达式可以生成一个值的列表，这个好理解，而生成表达式是会产生一系列的表达式，举个例子，比如
+square = (i**2+2 for i in 3),最终会生成(0**2+2),(1**2+2),(2**2+2)，生成表达式的思想就是协程的yield/resume机制。关于协程的概念，[戳这里]('http://blog.youxu.info/2014/12/04/coroutine/')。对于生成器的优点就是
+他不会产生中间存储值，相对于列表表达式使用更少的内存，而列表是一次生成存储之后再使用，在某些情况下，列表表达式相对于生成器表达式速度更快。在循环中，你可以使用一个生成器替换许多嵌套：
+{% highlight python %}
+    for example:
+        >>> n = ((a,b) for a in range(0,2) for b in range(4,6))
+        >>> for i in n:
+        ...   print i 
+
+        (0, 4)
+        (0, 5)
+        (1, 4)
+        (1, 5)
+{% endhighlight %}
+
+
 
 ------
 
