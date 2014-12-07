@@ -122,6 +122,7 @@ tags: [python]
 
 &emsp;&emsp;集合类型内置了许多操作符号的重载，比如` & `,` | `等。
 {% highlight python %}
+
     for example:
         >>> a = set([1,2,3,4])
         >>> b = set([3,4,5,6])
@@ -140,10 +141,12 @@ tags: [python]
 {% endhighlight %}
 
 ####嵌套的列表表达式和生成表达式
-{ highlight python }
+{% highlight python %}
+    
     for example:
     [(i,j) for i in range(3) for j in range(i) ]    
     ((i,j) for i in range(4) for j in range(i) )
+
 {% endhighlight %}
 
 &emsp;&emsp;python的列表表达式可以生成一个值的列表，这个好理解，而生成表达式是会产生一系列的表达式，举个例子，比如
@@ -159,6 +162,7 @@ square = (i**2+2 for i in 3),最终会生成(0**2+2),(1**2+2),(2**2+2)，生成�
         (0, 5)
         (1, 4)
         (1, 5)
+
 {% endhighlight %}
 
 
