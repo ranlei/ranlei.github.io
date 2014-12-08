@@ -164,12 +164,45 @@ square = (i**2+2 for i in 3),最终会生成(0**2+2),(1**2+2),(2**2+2)，生成�
         (1, 5)
 
 {% endhighlight %}
+####枚举计算
 
-####给生成函数发送值
-&emsp;&emsp;
+&emsp;&emsp;通过枚举包装一个迭代器,他将会产生和索引一起的元素。
 
-------
+{% highlight python %}
+    for example:
+        >>> a = ['a', 'b', 'c', 'd', 'e']
+        >>> for index, item in enumerate(a): 
+                print index, item
+        ...
+        0 a
+        1 b
+        2 c
+        3 d
+        4 e
 
+{% endhighlight %}
+
+同时，枚举还可以指定开始位置.
+{% highlight python %}
+    for example:
+        for index,item in enumerate(a, start=2)
+
+
+{% endhighlight %}
+
+####`iter()`能够携带一个可调用的参数
+
+{% highlight python %}
+    for instance:
+        def seek_next_line(f):
+        for c in iter(lambda : f.read(1),"\n"):
+            pass
+
+{% endhighlight %}
+
+`iter`是一个迭代器，`iter(callable, sentinel)`,被理解为被调用的参数是在哨兵被返回时调用。
+
+----
 
 &emsp;&emsp;未完待续。
 
